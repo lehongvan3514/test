@@ -1,28 +1,42 @@
 <?php
-
+use test\PasswordManager;
 include "PasswordManager.php";
-$a = new test\PasswordManager();
-if (isset($_POST['username']) || isset($_POST['password'])){
-    $a->setUserName($_POST['username']);
-    $a->setPass($_POST['password']);
-}
+$PassManager = PasswordManager::getInstance();
 
 switch ($_POST['submit']){
     case 'Login':
-        $ret = $a->login();
+        $ret = $PassManager->login();
         break;
     case 'Create':
-        $ret = $a->createNew();
+        $ret = $PassManager->createNewUser();
+        break;
+    case 'Validate':
+        $ret = $PassManager->validatePassword();
+        $_SESSION['ret'] = $ret;
+        header('Location: index.php');
+        exit();
         break;
     case 'Logout':
-        $ret = $a->logout();
+        $ret = $PassManager->logout();
         header('Location: index.php');
+        exit();
+        break;
+    case 'Change':
+        $ret = $PassManager->setNewPassword();
+        echo $ret['mess'];
+        require_once 'Main.php';
         exit();
         break;
 
 }
 
-echo $ret;
-require_once 'logout.php';
+if ($ret['res']){
+    echo $ret['mess'];
+    require_once 'Main.php';
+}else{
+    $_SESSION['ret'] = $ret;
+    header('Location: index.php');
+    exit();
+}
 
 

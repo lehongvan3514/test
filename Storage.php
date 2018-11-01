@@ -17,6 +17,7 @@ class Storage{
         if (!(new Storage)->validateUnique($arr['user'],$current)){
             return false;
         }
+
         $current[] = $arr;
 
         $current = serialize($current);
@@ -31,7 +32,6 @@ class Storage{
                 return false;
             }
         }
-
         return true;
     }
 
@@ -45,6 +45,7 @@ class Storage{
         if (empty($current)){
             return false;
         }
+
         $set = false;
         foreach ($current as &$val){
             if ($val['user'] === $userName){
